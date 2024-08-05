@@ -13,9 +13,15 @@ type LoanFormProps = {
 };
 
 export default function LoanForm({ onSubmitSuccess }: LoanFormProps) {
-  const { register, handleSubmit, reset } = useForm<LoanFormFields>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<LoanFormFields>();
 
   const LoanSubmit: SubmitHandler<LoanFormFields> = async (data) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       const signer_ids = data.signer_ids
         .split(",")
@@ -62,8 +68,14 @@ export default function LoanForm({ onSubmitSuccess }: LoanFormProps) {
         placeholder="Signer IDs (comma-separated)"
         className="p-2 rounded text-black"
       />
-      <button type="submit" className="bg-green-500 text-white p-2 rounded">
-        Submit Loan
+      <button
+        disabled={isSubmitting}
+        type="submit"
+        className={`p-2 rounded text-white ${
+          isSubmitting ? "bg-gray-600" : "bg-green-500"
+        }`}
+      >
+        {isSubmitting ? "Loading..." : "Submit"}
       </button>
     </form>
   );

@@ -13,9 +13,15 @@ type SignerFormProps = {
 };
 
 export default function SignerForm({ onSubmitSuccess }: SignerFormProps) {
-  const { register, handleSubmit, reset } = useForm<SignerFormFields>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<SignerFormFields>();
 
   const SignerSubmit: SubmitHandler<SignerFormFields> = async (data) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       const response = await axios.post("http://localhost:3000/signers", data);
       console.log("Signer submitted:", response.data);
@@ -49,8 +55,14 @@ export default function SignerForm({ onSubmitSuccess }: SignerFormProps) {
         placeholder="Email"
         className="p-2 rounded text-black"
       />
-      <button type="submit" className="bg-green-500 text-white p-2 rounded ">
-        Submit
+      <button
+        disabled={isSubmitting}
+        type="submit"
+        className={`p-2 rounded text-white ${
+          isSubmitting ? "bg-gray-600" : "bg-green-500"
+        }`}
+      >
+        {isSubmitting ? "Loading..." : "Submit"}
       </button>
     </form>
   );

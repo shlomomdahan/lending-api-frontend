@@ -16,9 +16,15 @@ type PaymentFormProps = {
 };
 
 export default function PaymentForm({ onSubmitSuccess }: PaymentFormProps) {
-  const { register, handleSubmit, reset } = useForm<PaymentFormFields>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<PaymentFormFields>();
 
   const PaymentSubmit: SubmitHandler<PaymentFormFields> = async (data) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       const paymentData = {
         amount: parseFloat(data.amount),
@@ -88,8 +94,14 @@ export default function PaymentForm({ onSubmitSuccess }: PaymentFormProps) {
         placeholder="Payment Note"
         className="p-2 rounded text-black"
       />
-      <button type="submit" className="bg-green-500 text-white p-2 rounded">
-        Submit Payment
+      <button
+        disabled={isSubmitting}
+        type="submit"
+        className={`p-2 rounded text-white ${
+          isSubmitting ? "bg-gray-600" : "bg-green-500"
+        }`}
+      >
+        {isSubmitting ? "Loading..." : "Submit"}
       </button>
     </form>
   );
