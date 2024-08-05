@@ -79,6 +79,7 @@ export default function Home() {
           "http://localhost:3000/payments"
         );
         setPayments(refreshedResponse.data);
+        fetchLoans();
       }, 11000);
     } catch (error) {
       console.error("Error fetching payments:", error);
