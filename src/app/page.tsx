@@ -74,6 +74,12 @@ export default function Home() {
         "http://localhost:3000/payments"
       );
       setPayments(response.data);
+      setTimeout(async () => {
+        const refreshedResponse = await axios.get<Payment[]>(
+          "http://localhost:3000/payments"
+        );
+        setPayments(refreshedResponse.data);
+      }, 11000);
     } catch (error) {
       console.error("Error fetching payments:", error);
     }
